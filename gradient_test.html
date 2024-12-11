@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* 主容器样式 - 设置整体画布尺寸和背景色 */
+        .container {
+            width: 1000px;
+            height: 800px;
+            background: #000;
+            position: relative;  /* 为内部绝对定位元素提供参考 */
+        }
+
+        /* 绘图区域样式 - 定义椭圆动画的显示范围 */
+        .drawing-area {
+            width: 320px;
+            height: 80px;
+            position: absolute;
+            left: 300px;
+            top: 200px;
+            border: 1px solid white;  /* 白色边框用于标识绘图区域 */
+            position: relative;  /* 为内部元素提供定位上下文 */
+        }
+
+        /* 椭圆渐变容器 - 用于定位内部的椭圆层 */
+        .ellipse-gradient {
+            width: 100%;
+            height: 100%;
+            position: relative;  /* 为内部椭圆提供定位上下文 */
+            transition: transform 0.1s ease-out;  /* 添加平滑过渡效果 */
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;  /* 确保移动的椭圆在最外层椭圆��面 */
+        }
+
+        /* 创建左半椭圆和右半椭圆的通用样式 */
+        .half-ellipse {
+            position: absolute;
+            height: 100%;
+            top: 50%;
+            overflow: hidden;
+        }
+
+        /* 最内层椭圆 - 分为左右两半 */
+        .ellipse1-left {
+            width: 40px;  /* 左半椭圆宽度 */
+            right: 50%;
+            background: radial-gradient(ellipse at right,
+                rgba(255, 255, 255, 0.8) 0%,
+                rgba(255, 255, 255, 0) 70%);
+        }
+
+        .ellipse1-right {
+            width: 30px;  /* 右半椭圆宽度 */
+            left: 50%;
+            background: radial-gradient(ellipse at left,
+                rgba(255, 255, 255, 0.8) 0%,
+                rgba(255, 255, 255, 0) 70%);
+        }
+
+        /* 第二层椭圆 */
+        .ellipse2-left {
+            width: 70px;
+            right: 50%;
+            background: radial-gradient(ellipse at right,
+                rgba(255, 255, 255, 0.7) 0%,
+                rgba(255, 255, 255, 0) 70%);
+        }
+
+        .ellipse2-right {
+            width: 50px;
+            left: 50%;
+            background: radial-gradient(ellipse at left,
+                rgba(255, 255, 255, 0.7) 0%,
+                rgba(255, 255, 255, 0) 70%);
+        }
+
+        /* 第三层椭圆 */
+        .ellipse3-left {
+            width: 90px;
+            right: 50%;
+            background: radial-gradient(ellipse at right,
+                rgba(255, 255, 255, 0.37) 0%,
+                rgba(255, 255, 255, 0) 70%);
+        }
+
+        .ellipse3-right {
+            width: 70px;
+            left: 50%;
+            background: radial-gradient(ellipse at left,
+                rgba(255, 255, 255, 0.37) 0%,
+                rgba(255, 255, 255, 0) 70%);
+        }
+
+        /* 第四层椭圆 */
+        .ellipse4-left {
+            width: 140px;
+            right: 50%;
+            background: radial-gradient(ellipse at right,
+                rgba(255, 255, 255, 0.3) 0%,
+                rgba(255, 255, 255, 0) 70%);
+        }
+
+        .ellipse4-right {
+            width: 120px;
+            left: 50%;
+            background: radial-gradient(ellipse at left,
+                rgba(255, 255, 255, 0.3) 0%,
+                rgba(255, 255, 255, 0) 70%);
+        }
+
+        /* 最外层椭圆 */
+        .ellipse5-left {
+            width: 170px;
+            right: 50%;
+            background: radial-gradient(ellipse at right,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0) 70%);
+        }
+
+        .ellipse5-right {
+            width: 170px;
+            left: 50%;
+            background: radial-gradient(ellipse at left,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0) 70%);
+        }
+
+        /* 添加状态显示样式 */
+        .status {
+            position: absolute;
+            top: 30px;
+            left: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 100px;
+            left: 10px;
+            color: #cccccc;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="status">
+            <div id="position">Current Position: 0</div>
+            <div id="autoMove">Auto Move: OFF</div>
+        </div>
+        <div class="drawing-area">
+            <div class="ellipse5">
+                <div class="half-ellipse ellipse5-left"></div>
+                <div class="half-ellipse ellipse5-right"></div>
+            </div>
+            <div class="ellipse-gradient" id="ellipseContainer">
+                <div class="ellipse1">
+                    <div class="half-ellipse ellipse1-left"></div>
+                    <div class="half-ellipse ellipse1-right"></div>
+                </div>
+                <div class="ellipse2">
+                    <div class="half-ellipse ellipse2-left"></div>
+                    <div class="half-ellipse ellipse2-right"></div>
+                </div>
+                <div class="ellipse3">
+                    <div class="half-ellipse ellipse3-left"></div>
+                    <div class="half-ellipse ellipse3-right"></div>
+                </div>
+                <div class="ellipse4">
+                    <div class="half-ellipse ellipse4-left"></div>
+                    <div class="half-ellipse ellipse4-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="instructions">
+            <div>Controls:</div>
+            <div>A/Left Arrow : Move Left</div>
+            <div>D/Right Arrow: Move Right</div>
+            <div>N : Start Auto Move</div>
+            <div>M : Stop Auto Move</div>
+            <div>Q : Reset Position</div>
+        </div>
+    </div>
+
+    <script>
+        const MOVE_MIN = -15;
+        const MOVE_MAX = 15;
+        const MOVE_STEP = 1;
+        const AUTO_MOVE_INTERVAL = 50; // ms
+
+        let currentPosition = 0;
+        let autoMove = false;
+        let moveDirection = -1;
+        let autoMoveInterval = null;
+
+        const ellipseContainer = document.getElementById('ellipseContainer');
+        const positionDisplay = document.getElementById('position');
+        const autoMoveDisplay = document.getElementById('autoMove');
+
+        function updatePosition(newPosition) {
+            if (newPosition >= MOVE_MIN && newPosition <= MOVE_MAX) {
+                currentPosition = newPosition;
+                ellipseContainer.style.transform = `translateX(${currentPosition * 2}px)`;
+                positionDisplay.textContent = `Current Position: ${currentPosition}`;
+            }
+        }
+
+        function handleAutoMove() {
+            if (moveDirection === -1) {
+                if (currentPosition > MOVE_MIN) {
+                    updatePosition(currentPosition - MOVE_STEP);
+                } else {
+                    moveDirection = 1;
+                }
+            } else {
+                if (currentPosition < MOVE_MAX) {
+                    updatePosition(currentPosition + MOVE_STEP);
+                } else {
+                    moveDirection = -1;
+                }
+            }
+        }
+
+        function startAutoMove() {
+            if (!autoMove) {
+                autoMove = true;
+                moveDirection = -1;
+                updatePosition(0);
+                autoMoveDisplay.textContent = 'Auto Move: ON';
+                autoMoveInterval = setInterval(handleAutoMove, AUTO_MOVE_INTERVAL);
+            }
+        }
+
+        function stopAutoMove() {
+            if (autoMove) {
+                autoMove = false;
+                clearInterval(autoMoveInterval);
+                autoMoveInterval = null;
+                autoMoveDisplay.textContent = 'Auto Move: OFF';
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (autoMove) return; // 自动移动时忽略手动控制
+
+            switch (event.key.toLowerCase()) {
+                case 'a':
+                case 'arrowleft':
+                    updatePosition(currentPosition - MOVE_STEP);
+                    break;
+                case 'd':
+                case 'arrowright':
+                    updatePosition(currentPosition + MOVE_STEP);
+                    break;
+                case 'n':
+                    startAutoMove();
+                    break;
+                case 'm':
+                    stopAutoMove();
+                    break;
+                case 'q':
+                    updatePosition(0);
+                    break;
+            }
+        });
+    </script>
+</body>
+</html> 

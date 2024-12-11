@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* 容器样式 */
+        .container {
+            width: 1000px;
+            height: 800px;
+            background: #000;
+            position: relative;
+        }
+
+        /* 绘图区域 */
+        .drawing-area {
+            width: 320px;
+            height: 80px;
+            position: absolute;
+            left: 300px;
+            top: 200px;
+            border: 1px solid white;
+        }
+
+        /* 圆环容器 */
+        .ring-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* 内圆环 */
+        .inner-ring {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.8) 40%,    /* 内圆边界亮度值 0.8 */
+                rgba(255, 255, 255, 0) 50%
+            );
+        }
+
+        /* 外圆环 */
+        .outer-ring {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0) 50%,
+                rgba(255, 255, 255, 0.3) 60%,    /* 外圆边界亮度值 0.3 */
+                rgba(255, 255, 255, 0) 70%
+            );
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="drawing-area">
+            <div class="ring-container">
+                <div class="outer-ring"></div>
+                <div class="inner-ring"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 这里可以添加控制亮度值的JavaScript代码
+        function updateRingBrightness(ringClass, brightness) {
+            const ring = document.querySelector(ringClass);
+            if (ring) {
+                if (ringClass === '.inner-ring') {
+                    ring.style.background = `radial-gradient(circle,
+                        rgba(255, 255, 255, ${brightness}) 40%,
+                        rgba(255, 255, 255, 0) 50%
+                    )`;
+                } else {
+                    ring.style.background = `radial-gradient(circle,
+                        rgba(255, 255, 255, 0) 50%,
+                        rgba(255, 255, 255, ${brightness}) 60%,
+                        rgba(255, 255, 255, 0) 70%
+                    )`;
+                }
+            }
+        }
+
+        // 示例：动态更新亮度值
+        // updateRingBrightness('.inner-ring', 0.9);  // 更新内圆环亮度
+        // updateRingBrightness('.outer-ring', 0.4);  // 更新外圆环亮度
+    </script>
+</body>
+</html> 
